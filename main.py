@@ -14,7 +14,7 @@ class App:
     pyxel.init(int(resolution[0]), int(resolution[1]), title="Pyxel Doom", fps=self.config.get("config.frame_rate"))
 
     # Map
-    self.colors = { "#": 8, "_": 7, " ": 0 }
+    self.colors = self.config.get("colors")
     self.middle = { "x": pyxel.width // 2, "y": pyxel.height // 2 }
     self.floor_size = 2
     self.wall_height = pyxel.height // 2
@@ -28,6 +28,7 @@ class App:
     self.max_render_distance = self.config.get("config.render_distance")
     self.started_time = time.time()
     self.game_paused = False
+    self.settings_shown = False
 
     self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.max_render_distance)
 
@@ -71,8 +72,9 @@ class App:
       # Draw buttons
       self.settings_button = Button(self.middle["x"] - 42, self.middle["y"] - 40, 64, 16, 7, "Settings", 7, self.settings)
       self.settings_button.draw()
-      self.quit_button = Button(self.middle["x"] - 42, self.middle["y"] - 16, 64, 16, 7, "Quit", 7, pyxel.quit)
-      self.quit_button.draw()
+      if self.settings_shown == False:
+        self.quit_button = Button(self.middle["x"] - 42, self.middle["y"] - 16, 64, 16, 7, "Quit", 7, pyxel.quit)
+        self.quit_button.draw()
       return
     
     # Draw elements
@@ -91,7 +93,15 @@ class App:
 
   # Button actions
   def settings(self):
-    pass
+    self.settings_shown = not self.settings_shown
+
+    if self.settings_shown:
+      """
+      Render distance ^ 8 v
+      Frame rate ^ 60 v
+      Resolution ^ 640x360 v      
+      """
+      print("Settings")
 
 if __name__ == "__main__":
   App()
