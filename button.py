@@ -1,0 +1,22 @@
+import pyxel
+
+class Button():
+  def __init__(self, x, y, width, height, color, text, text_color, action):
+    self.x = x
+    self.y = y
+    self.width = width
+    self.height = height
+    self.color = color
+    self.text = text
+    self.text_color = text_color
+    self.action = action
+
+  def draw(self):
+    pyxel.rectb(self.x, self.y, self.width, self.height, self.color)
+    pyxel.text(self.x + (self.width - len(self.text) * 4) / 2, self.y + (self.height - 6) / 2, self.text, self.text_color)
+
+  def is_clicked(self, x, y):
+    if x > self.x and x < self.x + self.width and y > self.y and y < self.y + self.height:
+      self.action()
+      return True
+    return False
