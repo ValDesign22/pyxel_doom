@@ -4,8 +4,6 @@ class Player:
     self.y = y
     self.orientation = orientation
     self.map = map
-    
-    print(f"Player at {self.x}, {self.y} facing {self.orientation}")
 
   def move_forward(self):
     if self.orientation == 0:
