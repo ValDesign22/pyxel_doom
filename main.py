@@ -1,3 +1,4 @@
+import math
 import pyxel
 import time
 
@@ -96,7 +97,7 @@ class App:
         self.rdist_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 50, 8, 8, 7, "", 7, lambda: self.change_render_distance("down"), "down")
         self.rdist_btn_down.draw()
         pyxel.text(self.middle["x"] + 14, self.middle["y"] - 48, f"{self.max_render_distance}", 7)
-        self.rdist_btn_up = ArrowButton(self.middle["x"] + 22, self.middle["y"] - 50, 8, 8, 7, "", 7, lambda: self.change_render_distance("up"), "up")
+        self.rdist_btn_up = ArrowButton(self.middle["x"] + 32, self.middle["y"] - 50, 8, 8, 7, "", 7, lambda: self.change_render_distance("up"), "up")
         self.rdist_btn_up.draw()
 
         # Frame rate
@@ -104,7 +105,7 @@ class App:
         self.frate_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 34, 8, 8, 7, "", 7, lambda: self.change_frame_rate("down"), "down")
         self.frate_btn_down.draw()
         pyxel.text(self.middle["x"] + 14, self.middle["y"] - 32, f"{self.config.get('config.frame_rate')}", 7)
-        self.frate_btn_up = ArrowButton(self.middle["x"] + 22, self.middle["y"] - 34, 8, 8, 7, "", 7, lambda: self.change_frame_rate("up"), "up")
+        self.frate_btn_up = ArrowButton(self.middle["x"] + 32, self.middle["y"] - 34, 8, 8, 7, "", 7, lambda: self.change_frame_rate("up"), "up")
         self.frate_btn_up.draw()
 
         # Resolution
@@ -118,6 +119,14 @@ class App:
         # Save and close
         self.save_button = Button(self.middle["x"] - 32, self.middle["y"] + 16, 64, 16, 7, "Save and close", 7, self.save_settings)
         self.save_button.draw()
+
+        # Need restart
+        if (
+          self.resolution != self.config.get("config.resolution").split("x")
+        ) or (
+          math.ceil(pyxel.frame_count / (time.time() - self.started_time)) != self.config.get("config.frame_rate")
+        ):
+          pyxel.text(self.middle["x"] - 64, self.middle["y"], "Need restart", 8)
       return
     
     # Draw elements
@@ -145,19 +154,16 @@ class App:
       self.max_render_distance = max(1, self.max_render_distance - 1)
   
   def change_frame_rate(self, direction):
+    framerates = [ 30, 60, 120, 144, 165, 240 ]
     if direction == "up":
-      self.config.set("config.frame_rate", self.config.get("config.frame_rate") + 1)
+      self.config.set("config.frame_rate", framerates[(framerates.index(self.config.get("config.frame_rate")) + 1) % len(framerates)])
     else:
-      self.config.set("config.frame_rate", max(1, self.config.get("config.frame_rate") - 1))
+      self.config.set("config.frame_rate", framerates[(framerates.index(self.config.get("config.frame_rate")) - 1) % len(framerates)])
 
   def change_resolution(self, direction):
     resolutions = [ "640x360", "1280x720", "1920x1080" ]
     index = resolutions.index(f"{self.resolution[0]}x{self.resolution[1]}")
-    if direction == "up":
-      index = (index + 1) % len(resolutions)
-    else:
-      index = (index - 1) % len(resolutions)
-    self.resolution = resolutions[index].split("x")
+    self.resolution = resolutions[(index + 1) % len(resolutions) if direction == "up" else (index - 1) % len(resolutions)].split("x")
   
   def save_settings(self):
     self.config.set("config.render_distance", self.max_render_distance)
