@@ -1,0 +1,10 @@
+config:
+  resolution: 640x360
+  render_distance: 8
+  frame_rate: 60
+colors:
+  "#": 8
+  "_": 7
+  " ": 0
+assets:
+  map: "assets/map.txt"
