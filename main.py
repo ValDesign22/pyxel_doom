@@ -26,13 +26,13 @@ class App:
 
     # Parameters
     self.debug = False
-    self.max_render_distance = self.config.get("config.render_distance")
+    self.render_distance = self.config.get("config.render_distance")
     self.started_time = time.time()
     self.game_paused = False
     self.settings_shown = False
     self.max_walls = self.config.get("config.max_walls")
 
-    self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.max_render_distance, self.max_walls)
+    self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.render_distance, self.max_walls)
 
     pyxel.run(self.update, self.draw)
 
@@ -62,9 +62,9 @@ class App:
       return
 
     # Player movement
-    if pyxel.btnp(pyxel.KEY_Z):
+    if pyxel.btn(pyxel.KEY_Z):
       self.player.move_forward()
-    if pyxel.btnp(pyxel.KEY_S):
+    if pyxel.btn(pyxel.KEY_S):
       self.player.move_backward()
     if pyxel.btnp(pyxel.KEY_Q):
       self.player.rotate_left()
@@ -97,7 +97,7 @@ class App:
         pyxel.text(self.middle["x"] - 64, self.middle["y"] - 48, "Render distance", 7)
         self.rdist_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 50, 8, 8, 7, "", 7, lambda: self.change_render_distance("down"), "down")
         self.rdist_btn_down.draw()
-        pyxel.text(self.middle["x"] + 14, self.middle["y"] - 48, f"{self.max_render_distance}", 7)
+        pyxel.text(self.middle["x"] + 14, self.middle["y"] - 48, f"{self.render_distance}", 7)
         self.rdist_btn_up = ArrowButton(self.middle["x"] + 32, self.middle["y"] - 50, 8, 8, 7, "", 7, lambda: self.change_render_distance("up"), "up")
         self.rdist_btn_up.draw()
 
@@ -118,16 +118,16 @@ class App:
         self.res_btn_up.draw()
 
         # Save and close
-        self.save_button = Button(self.middle["x"] - 32, self.middle["y"] + 16, 64, 16, 7, "Save and close", 7, self.save_settings)
-        self.save_button.draw()
-
-        # Need restart
         if (
           self.resolution != self.config.get("config.resolution").split("x")
         ) or (
           math.ceil(pyxel.frame_count / (time.time() - self.started_time)) != self.config.get("config.frame_rate")
         ):
           pyxel.text(self.middle["x"] - 64, self.middle["y"], "Need restart", 8)
+        self.save_button = Button(self.middle["x"] - 32, self.middle["y"] + 16, 64, 16, 7, "Save and close", 7, self.save_settings)
+        self.save_button.draw()
+
+        
       return
     
     # Draw elements
@@ -150,9 +150,9 @@ class App:
   
   def change_render_distance(self, direction):
     if direction == "up":
-      self.max_render_distance += 1
+      self.render_distance += 1
     else:
-      self.max_render_distance = max(1, self.max_render_distance - 1)
+      self.render_distance = max(1, self.render_distance - 1)
   
   def change_frame_rate(self, direction):
     framerates = [ 30, 60, 120, 144, 165, 240 ]
@@ -167,11 +167,11 @@ class App:
     self.resolution = resolutions[(index + 1) % len(resolutions) if direction == "up" else (index - 1) % len(resolutions)].split("x")
   
   def save_settings(self):
-    self.config.set("config.render_distance", self.max_render_distance)
+    self.config.set("config.render_distance", self.render_distance)
     self.config.set("config.frame_rate", self.config.get("config.frame_rate"))
     self.config.set("config.resolution", f"{self.resolution[0]}x{self.resolution[1]}")
     self.settings_shown = False
-    self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.max_render_distance)
+    self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.render_distance, self.max_walls)
 
 if __name__ == "__main__":
   App()

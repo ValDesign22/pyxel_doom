@@ -7,13 +7,13 @@ class Direction:
   WEST = 270
 
 class Renderer():
-  def __init__(self, player, map, colors, middle, wall_height, max_render_distance, max_walls):
+  def __init__(self, player, map, colors, middle, wall_height, render_distance, max_walls):
     self.player = player
     self.map = map
     self.colors = colors
     self.middle = middle
     self.wall_height = wall_height
-    self.max_render_distance = max_render_distance
+    self.render_distance = render_distance
     self.max_walls = max_walls
 
   def draw(self):
@@ -32,6 +32,8 @@ class Renderer():
       i+=1
     
     while True:
+      if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map):
+        break
       if self.player.orientation == Direction.NORTH:
         y -= 1
       elif self.player.orientation == Direction.EAST:
@@ -40,9 +42,7 @@ class Renderer():
         y += 1
       elif self.player.orientation == Direction.WEST:
         x -= 1
-      if distance_to_obstacle > self.max_render_distance:
-        break
-      if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map):
+      if distance_to_obstacle > self.render_distance:
         break
       if self.map[y][x] == "_" and obstacle_type == "#":
         break
@@ -75,6 +75,8 @@ class Renderer():
       y -= side
 
     while True:
+      if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map):
+        break
       if self.player.orientation == Direction.NORTH:
         y -= 1
         if self.map[y+1][x] != " ":
@@ -91,9 +93,7 @@ class Renderer():
         x -= 1
         if self.map[y][x+1] != " ":
           break
-      if distance_to_obstacle > self.max_render_distance:
-        break
-      if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map):
+      if distance_to_obstacle > self.render_distance:
         break
       if self.map[y][x] == "_" and obstacle_type == "#":
         break
@@ -130,10 +130,7 @@ class Renderer():
     elif self.player.orientation == Direction.WEST:
       y += side
     if self.map[y][x] != " ":
-      print("There is an obstacle on the side")
       return
-    
-    print("There is no obstacle on the side")
     
     obstacle_height = self.wall_height / (1+distance)
     oh2 = self.wall_height / (2+distance)
@@ -146,7 +143,6 @@ class Renderer():
 
       pyxel.line(top_left, self.middle["y"] - obstacle_height / 2, top_left2, self.middle["y"] - oh2 / 2, color)
       pyxel.line(bottom_left, self.middle["y"] + obstacle_height / 2, bottom_left2, self.middle["y"] + oh2 / 2, color)
-      # vertical line
       pyxel.line(top_left2, self.middle["y"] - oh2 / 2, top_left2, self.middle["y"] + oh2 / 2, color)
     else:
       top_right = self.middle["x"] + obstacle_height / 2 + side * obstacle_height
