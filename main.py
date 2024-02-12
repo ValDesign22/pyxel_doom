@@ -62,9 +62,9 @@ class App:
       return
 
     # Player movement
-    if pyxel.btn(pyxel.KEY_Z):
+    if pyxel.btnp(pyxel.KEY_Z):
       self.player.move_forward()
-    if pyxel.btn(pyxel.KEY_S):
+    if pyxel.btnp(pyxel.KEY_S):
       self.player.move_backward()
     if pyxel.btnp(pyxel.KEY_Q):
       self.player.rotate_left()

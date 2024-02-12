@@ -140,7 +140,8 @@ class Renderer():
       top_left2 = self.middle["x"] - oh2 / 2 + side * oh2
       bottom_left = self.middle["x"] - obstacle_height / 2 + side * obstacle_height
       bottom_left2 = self.middle["x"] - oh2 / 2 + side * oh2
-
+      pyxel.tri(top_left, self.middle["y"] - obstacle_height / 2, top_left2, self.middle["y"] - oh2 / 2, top_left2, self.middle["y"] + oh2 / 2, color)
+      pyxel.tri(top_left, self.middle["y"] - obstacle_height / 2, bottom_left, self.middle["y"] + obstacle_height / 2, bottom_left2, self.middle["y"] + oh2 / 2, color)
       pyxel.line(top_left, self.middle["y"] - obstacle_height / 2, top_left2, self.middle["y"] - oh2 / 2, color)
       pyxel.line(bottom_left, self.middle["y"] + obstacle_height / 2, bottom_left2, self.middle["y"] + oh2 / 2, color)
       pyxel.line(top_left2, self.middle["y"] - oh2 / 2, top_left2, self.middle["y"] + oh2 / 2, color)
@@ -149,7 +150,8 @@ class Renderer():
       top_right2 = self.middle["x"] + oh2 / 2 + side * oh2
       bottom_right = self.middle["x"] + obstacle_height / 2 + side * obstacle_height
       bottom_right2 = self.middle["x"] + oh2 / 2 + side * oh2
-
+      pyxel.tri(top_right, self.middle["y"] - obstacle_height / 2, top_right2, self.middle["y"] - oh2 / 2, top_right2, self.middle["y"] + oh2 / 2, color)
+      pyxel.tri(top_right, self.middle["y"] - obstacle_height / 2, bottom_right, self.middle["y"] + obstacle_height / 2, bottom_right2, self.middle["y"] + oh2 / 2, color)
       pyxel.line(top_right, self.middle["y"] - obstacle_height / 2, top_right2, self.middle["y"] - oh2 / 2, color)
       pyxel.line(bottom_right, self.middle["y"] + obstacle_height / 2, bottom_right2, self.middle["y"] + oh2 / 2, color)
       pyxel.line(top_right2, self.middle["y"] - oh2 / 2, top_right2, self.middle["y"] + oh2 / 2, color)
