@@ -30,8 +30,9 @@ class App:
     self.started_time = time.time()
     self.game_paused = False
     self.settings_shown = False
+    self.max_walls = self.config.get("config.max_walls")
 
-    self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.max_render_distance)
+    self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.max_render_distance, self.max_walls)
 
     pyxel.run(self.update, self.draw)
 

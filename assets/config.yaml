@@ -6,5 +6,6 @@ colors:
   _: 7
 config:
   frame_rate: 30
-  render_distance: 10
+  render_distance: 19
   resolution: 640x360
+  max_walls: 3

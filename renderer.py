@@ -1,6 +1,5 @@
 import pyxel
 
-
 class Direction:
   NORTH = 0
   EAST = 90
@@ -8,13 +7,14 @@ class Direction:
   WEST = 270
 
 class Renderer():
-  def __init__(self, player, map, colors, middle, wall_height, max_render_distance):
+  def __init__(self, player, map, colors, middle, wall_height, max_render_distance, max_walls):
     self.player = player
     self.map = map
     self.colors = colors
     self.middle = middle
     self.wall_height = wall_height
     self.max_render_distance = max_render_distance
+    self.max_walls = max_walls
 
   def draw(self):
     self.draw_obstacles("#")
@@ -24,9 +24,12 @@ class Renderer():
     distance_to_obstacle = 0
     obstacle = False
     x, y = self.player.x, self.player.y
-
-    self.draw_next_wall(x, y, 1, obstacle_type)
-    self.draw_next_wall(x, y, -1, obstacle_type)
+    
+    i = -self.max_walls
+    while i != 0:
+      self.draw_next_wall(x, y, -i, obstacle_type)
+      self.draw_next_wall(x, y, i, obstacle_type)
+      i+=1
     
     while True:
       if self.player.orientation == Direction.NORTH:
@@ -106,6 +109,7 @@ class Renderer():
       color = self.colors.get(obstacle_type, 0)
       left = self.middle["x"] - obstacle_height / 2 + side * obstacle_height
       right = self.middle["x"] + obstacle_height / 2 + side * obstacle_height
+      self.draw_side(distance_to_obstacle, x, y, side)
       self.draw_obstacle(left, right, obstacle_height, color)
   
   def draw_obstacle(self, left, right, obstacle_height, color):
@@ -114,3 +118,42 @@ class Renderer():
     pyxel.line(right, self.middle["y"] - obstacle_height / 2, right, self.middle["y"] + obstacle_height / 2, 12)
     pyxel.line(left, self.middle["y"] - obstacle_height / 2, right, self.middle["y"] - obstacle_height / 2, 12)
     pyxel.line(left, self.middle["y"] + obstacle_height / 2, right, self.middle["y"] + obstacle_height / 2, 12)
+
+  def draw_side(self, distance, x0, y0, side):
+    x, y = x0, y0
+    if self.player.orientation == Direction.NORTH:
+      x -= side
+    elif self.player.orientation == Direction.EAST:
+      y -= side
+    elif self.player.orientation == Direction.SOUTH:
+      x += side
+    elif self.player.orientation == Direction.WEST:
+      y += side
+    if self.map[y][x] != " ":
+      print("There is an obstacle on the side")
+      return
+    
+    print("There is no obstacle on the side")
+    
+    obstacle_height = self.wall_height / (1+distance)
+    oh2 = self.wall_height / (2+distance)
+    color = 9
+    if side > 0:
+      top_left = self.middle["x"] - obstacle_height / 2 + side * obstacle_height
+      top_left2 = self.middle["x"] - oh2 / 2 + side * oh2
+      bottom_left = self.middle["x"] - obstacle_height / 2 + side * obstacle_height
+      bottom_left2 = self.middle["x"] - oh2 / 2 + side * oh2
+
+      pyxel.line(top_left, self.middle["y"] - obstacle_height / 2, top_left2, self.middle["y"] - oh2 / 2, color)
+      pyxel.line(bottom_left, self.middle["y"] + obstacle_height / 2, bottom_left2, self.middle["y"] + oh2 / 2, color)
+      # vertical line
+      pyxel.line(top_left2, self.middle["y"] - oh2 / 2, top_left2, self.middle["y"] + oh2 / 2, color)
+    else:
+      top_right = self.middle["x"] + obstacle_height / 2 + side * obstacle_height
+      top_right2 = self.middle["x"] + oh2 / 2 + side * oh2
+      bottom_right = self.middle["x"] + obstacle_height / 2 + side * obstacle_height
+      bottom_right2 = self.middle["x"] + oh2 / 2 + side * oh2
+
+      pyxel.line(top_right, self.middle["y"] - obstacle_height / 2, top_right2, self.middle["y"] - oh2 / 2, color)
+      pyxel.line(bottom_right, self.middle["y"] + obstacle_height / 2, bottom_right2, self.middle["y"] + oh2 / 2, color)
+      pyxel.line(top_right2, self.middle["y"] - oh2 / 2, top_right2, self.middle["y"] + oh2 / 2, color)
