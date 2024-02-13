@@ -37,6 +37,7 @@ class App:
     self.game_paused = False
     self.settings_shown = False
     self.max_walls = self.config.get("config.max_walls")
+    self.fullscreen = self.config.get("config.fullscreen")
 
     self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.render_distance, self.max_walls)
 
@@ -52,6 +53,9 @@ class App:
       pyxel.mouse(self.game_paused)
     if pyxel.btnp(pyxel.KEY_F3):
       self.renderer.change_render_mode()
+    if pyxel.btnp(pyxel.KEY_F11):
+      pyxel.fullscreen(not self.fullscreen)
+      self.fullscreen = self.config.set("config.fullscreen", not self.fullscreen)
 
     # Game paused
     if self.game_paused:
