@@ -44,7 +44,9 @@ class App:
     if pyxel.btnp(pyxel.KEY_F2):
       self.game_paused = not self.game_paused
       pyxel.mouse(self.game_paused)
-      
+    if pyxel.btnp(pyxel.KEY_F3):
+      self.renderer.change_render_mode()
+
     # Game paused
     if self.game_paused:
       if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
