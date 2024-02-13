@@ -127,14 +127,23 @@ class Renderer():
 
   def draw_side(self, distance, x0, y0, side, color):
     x, y = x0, y0
+    side_to_ignore = 1 if side > 0 else -1
     if self.player.orientation == Direction.NORTH:
       x -= side
+      if self.map[y][x+side_to_ignore] != " ":
+        return
     elif self.player.orientation == Direction.EAST:
       y -= side
+      if self.map[y-side_to_ignore][x] != " ":
+        return
     elif self.player.orientation == Direction.SOUTH:
       x += side
+      if self.map[y][x-side_to_ignore] != " ":
+        return
     elif self.player.orientation == Direction.WEST:
       y += side
+      if self.map[y+side_to_ignore][x] != " ":
+        return
     if self.map[y][x] != " ":
       return
     

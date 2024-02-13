@@ -2,7 +2,7 @@ assets:
   map: assets/map.txt
 colors:
   ' ': 0
-  '#': 8
+  '#': 4
   _: 7
 config:
   frame_rate: 60
