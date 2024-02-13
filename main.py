@@ -12,7 +12,13 @@ class App:
     self.config = Config()
     self.resolution = self.config.get("config.resolution").split("x")
 
-    pyxel.init(int(self.resolution[0]), int(self.resolution[1]), title="Pyxel Doom", fps=self.config.get("config.frame_rate"))
+    pyxel.init(
+      width=int(self.resolution[0]),
+      height=int(self.resolution[1]),
+      title="Pyxel Doom",
+      fps=self.config.get("config.frame_rate"),
+      quit_key=None,
+    )
 
     # Map
     self.colors = self.config.get("colors")

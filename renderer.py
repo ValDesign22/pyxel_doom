@@ -60,10 +60,7 @@ class Renderer():
         
     if obstacle:
       obstacle_height = self.wall_height / (1 + distance_to_obstacle)
-      color = self.colors.get(obstacle_type, 0)
-      left = self.middle["x"] - obstacle_height / 2
-      right = self.middle["x"] + obstacle_height / 2
-      self.draw_obstacle(left, right, obstacle_height, color)
+      self.draw_obstacle(self.middle["x"] - obstacle_height / 2, self.middle["x"] + obstacle_height / 2, obstacle_height, self.colors.get(obstacle_type, 0))
 
   def draw_next_wall(self, x, y, side, obstacle_type):
     distance_to_obstacle = 0
