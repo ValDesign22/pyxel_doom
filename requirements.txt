@@ -1,7 +1,7 @@
 certifi==2023.11.17
 charset-normalizer==3.3.2
 idna==3.6
-Pillow==10.1.0
+Pillow==10.2.0
 pyxel==2.0.7
 PyYAML==6.0.1
 setuptools==68.0.0
