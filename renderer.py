@@ -133,3 +133,7 @@ class Renderer():
       pyxel.line(top_right, self.middle["y"] - obstacle_height / 2, top_right2, self.middle["y"] - oh2 / 2, 12)
       pyxel.line(bottom_right, self.middle["y"] + obstacle_height / 2, bottom_right2, self.middle["y"] + oh2 / 2, 12)
       pyxel.line(top_right2, self.middle["y"] - oh2 / 2, top_right2, self.middle["y"] + oh2 / 2, 12)
+
+  def draw_row(self, range):
+    # TODO: Implement this method
+    pass
