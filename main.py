@@ -91,6 +91,9 @@ class App:
 
       # Keyboard and gamepad
       if self.settings_shown == False:
+        if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B):
+          self.game_paused = False
+          pyxel.mouse(False)
         if pyxel.btnp(pyxel.KEY_DOWN) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN) or pyxel.btnp(pyxel.KEY_Z):
           self.gamepad_pressed = True
           self.current_button = (self.current_button + 1) % 2
@@ -147,9 +150,6 @@ class App:
     pyxel.cls(0)
 
     if self.game_paused:
-      if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B):
-        self.game_paused = False
-        pyxel.mouse(False)
       # Draw buttons
       if self.settings_shown == False:
         pyxel.text(self.middle["x"] - 32, self.middle["y"] - 64, "Game Paused", 7)
