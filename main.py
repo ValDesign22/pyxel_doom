@@ -47,12 +47,12 @@ class App:
   # Game loop
   def update(self):
     # Menu
-    if pyxel.btnp(pyxel.KEY_F1):
+    if pyxel.btnp(pyxel.KEY_F1) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_BACK):
       self.debug = not self.debug
-    if pyxel.btnp(pyxel.KEY_F2):
+    if pyxel.btnp(pyxel.KEY_F2) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_START):
       self.game_paused = not self.game_paused
       pyxel.mouse(self.game_paused)
-    if pyxel.btnp(pyxel.KEY_F3):
+    if pyxel.btnp(pyxel.KEY_F3): # Only with keyboard
       self.renderer.change_render_mode()
     if pyxel.btnp(pyxel.KEY_F11):
       pyxel.fullscreen(not self.fullscreen)
@@ -72,32 +72,19 @@ class App:
           self.res_btn_down.is_clicked(pyxel.mouse_x, pyxel.mouse_y)
           self.res_btn_up.is_clicked(pyxel.mouse_x, pyxel.mouse_y)
           self.save_button.is_clicked(pyxel.mouse_x, pyxel.mouse_y)
+      if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_A):
+        print("A")
       return
 
     # Player movement
-    # Keyboard
-    if pyxel.btnp(pyxel.KEY_Z):
+    if pyxel.btnp(pyxel.KEY_Z) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_UP):
       self.player.move_forward()
-    if pyxel.btnp(pyxel.KEY_S):
+    if pyxel.btnp(pyxel.KEY_S) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN):
       self.player.move_backward()
-    if pyxel.btnp(pyxel.KEY_Q):
+    if pyxel.btnp(pyxel.KEY_Q) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT):
       self.player.rotate_left()
-    if pyxel.btnp(pyxel.KEY_D):
+    if pyxel.btnp(pyxel.KEY_D) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT):
       self.player.rotate_right()
-
-    # Gamepad
-    if pyxel.btnv(pyxel.GAMEPAD1_AXIS_LEFTY) < -30000:
-      self.player.move_forward()
-      time.sleep(0.2)
-    if pyxel.btnv(pyxel.GAMEPAD1_AXIS_LEFTY) > 30000:
-      self.player.move_backward()
-      time.sleep(0.2)
-    if pyxel.btnv(pyxel.GAMEPAD1_AXIS_RIGHTX) > 30000:
-      self.player.rotate_right()
-      time.sleep(0.2)
-    if pyxel.btnv(pyxel.GAMEPAD1_AXIS_RIGHTX) < -30000:
-      self.player.rotate_left()
-      time.sleep(0.2)
 
     self.player.x = max(0, min(len(self.map[0]) - 1, self.player.x))
     self.player.y = max(0, min(len(self.map) - 1, self.player.y))
@@ -160,14 +147,16 @@ class App:
     
     # Draw elements
     self.renderer.draw()
-    # Draw minimap
-    for y, row in enumerate(self.map):
-      for x, tile in enumerate(row):
-        pyxel.rect(x * self.floor_size, y * self.floor_size, self.floor_size, self.floor_size, self.colors[tile])
-    pyxel.rect(self.player.x * self.floor_size, self.player.y * self.floor_size, self.floor_size, self.floor_size, 9)
 
     # Draw debug
     if self.debug:
+      # Draw minimap
+      for y, row in enumerate(self.map):
+        for x, tile in enumerate(row):
+          pyxel.rect(x * self.floor_size, y * self.floor_size, self.floor_size, self.floor_size, self.colors[tile])
+      pyxel.rect(self.player.x * self.floor_size, self.player.y * self.floor_size, self.floor_size, self.floor_size, 9)
+
+      # Profiling
       pyxel.text(pyxel.width - 48, 4, f"{self.player.x}, {self.player.y}", 7)
       pyxel.text(pyxel.width - 48, 12, f"{"North" if self.player.orientation == 0 else "East" if self.player.orientation == 90 else "South" if self.player.orientation == 180 else "West"}", 7)
       pyxel.text(pyxel.width - 48, 20, f"{(pyxel.frame_count/(time.time() - self.started_time)):.2f} FPS", 7)
