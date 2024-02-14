@@ -41,6 +41,7 @@ class App:
 
     self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.render_distance, self.max_walls)
 
+    pyxel.fullscreen(self.fullscreen)
     pyxel.run(self.update, self.draw)
 
   # Game loop
@@ -74,18 +75,29 @@ class App:
       return
 
     # Player movement
-    if pyxel.btnp(pyxel.KEY_Z) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_UP):
+    # Keyboard
+    if pyxel.btnp(pyxel.KEY_Z):
       self.player.move_forward()
-    if pyxel.btnp(pyxel.KEY_S) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN):
+    if pyxel.btnp(pyxel.KEY_S):
       self.player.move_backward()
     if pyxel.btnp(pyxel.KEY_Q):
       self.player.rotate_left()
     if pyxel.btnp(pyxel.KEY_D):
       self.player.rotate_right()
 
-    #TODO: Checking for Right Stick X-Axis to rotate the player
-    print(pyxel.btnv(pyxel.GAMEPAD1_AXIS_RIGHTX) > 32000)
-    print(pyxel.btnv(pyxel.GAMEPAD1_AXIS_RIGHTX) < -32000)
+    # Gamepad
+    if pyxel.btnv(pyxel.GAMEPAD1_AXIS_LEFTY) < -30000:
+      self.player.move_forward()
+      time.sleep(0.2)
+    if pyxel.btnv(pyxel.GAMEPAD1_AXIS_LEFTY) > 30000:
+      self.player.move_backward()
+      time.sleep(0.2)
+    if pyxel.btnv(pyxel.GAMEPAD1_AXIS_RIGHTX) > 30000:
+      self.player.rotate_right()
+      time.sleep(0.2)
+    if pyxel.btnv(pyxel.GAMEPAD1_AXIS_RIGHTX) < -30000:
+      self.player.rotate_left()
+      time.sleep(0.2)
 
     self.player.x = max(0, min(len(self.map[0]) - 1, self.player.x))
     self.player.y = max(0, min(len(self.map) - 1, self.player.y))

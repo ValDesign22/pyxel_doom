@@ -6,7 +6,7 @@ colors:
   _: 7
 config:
   frame_rate: 60
-  fullscreen: true
+  fullscreen: false
   max_walls: 10
   render_distance: 19
   resolution: 640x360
