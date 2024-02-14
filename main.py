@@ -6,6 +6,7 @@ from button import ArrowButton, Button
 from config import Config
 from player import Player
 from renderer import Renderer
+from rendererv2 import RendererV2
 
 class App:
   def __init__(self):
@@ -41,7 +42,7 @@ class App:
     self.max_walls = self.config.get("config.max_walls")
     self.fullscreen = self.config.get("config.fullscreen")
 
-    self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.render_distance, self.max_walls)
+    self.renderer = RendererV2(self.player, self.map, self.colors, self.middle, self.wall_height, self.render_distance, self.max_walls)
 
     # Buttons
     self.settings_button = Button(self.middle["x"] - 42, self.middle["y"] - 40, 64, 16, 7, "Settings", 7, self.settings)
@@ -291,7 +292,7 @@ class App:
     self.config.set("config.frame_rate", self.config.get("config.frame_rate"))
     self.config.set("config.resolution", f"{self.resolution[0]}x{self.resolution[1]}")
     self.settings_shown = False
-    self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.render_distance, self.max_walls)
+    self.renderer = RendererV2(self.player, self.map, self.colors, self.middle, self.wall_height, self.render_distance, self.max_walls)
 
 if __name__ == "__main__":
   App()

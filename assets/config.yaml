@@ -5,7 +5,7 @@ colors:
   '#': 4
   _: 7
 config:
-  frame_rate: 60
+  frame_rate: 30
   fullscreen: false
   max_walls: 10
   render_distance: 19
