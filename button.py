@@ -20,7 +20,6 @@ class Button():
 
   def is_clicked(self, x, y):
     if x > self.x and x < self.x + self.width and y > self.y and y < self.y + self.height:
-      print("Button clicked")
       self.action()
       return True
     return False
