@@ -37,22 +37,14 @@ class Renderer():
       i+=1
     
     while True:
-      if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map):
-        break
-      if self.player.orientation == Direction.NORTH:
-        y -= 1
-      elif self.player.orientation == Direction.EAST:
-        x += 1
-      elif self.player.orientation == Direction.SOUTH:
-        y += 1
-      elif self.player.orientation == Direction.WEST:
-        x -= 1
-      if distance_to_obstacle > self.render_distance:
-        break
-      if self.map[y][x] == "_" and obstacle_type == "#":
-        break
-      elif self.map[y][x] == "#" and obstacle_type == "_":
-        break
+      if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map): break
+      if self.player.orientation == Direction.NORTH: y -= 1
+      elif self.player.orientation == Direction.EAST: x += 1
+      elif self.player.orientation == Direction.SOUTH: y += 1
+      elif self.player.orientation == Direction.WEST: x -= 1
+      if distance_to_obstacle > self.render_distance: break
+      if self.map[y][x] == "_" and obstacle_type == "#": break
+      elif self.map[y][x] == "#" and obstacle_type == "_": break
       elif self.map[y][x] == obstacle_type:
         obstacle = True
         break
@@ -67,40 +59,28 @@ class Renderer():
     obstacle = False
     x, y = x, y
 
-    if self.player.orientation == Direction.NORTH:
-      x += side
-    elif self.player.orientation == Direction.EAST:
-      y += side
-    elif self.player.orientation == Direction.SOUTH:
-      x -= side
-    elif self.player.orientation == Direction.WEST:
-      y -= side
+    if self.player.orientation == Direction.NORTH: x += side
+    elif self.player.orientation == Direction.EAST: y += side
+    elif self.player.orientation == Direction.SOUTH: x -= side
+    elif self.player.orientation == Direction.WEST: y -= side
 
     while True:
-      if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map):
-        break
+      if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map): break
       if self.player.orientation == Direction.NORTH:
         y -= 1
-        if self.map[y+1][x] != " ":
-          break
+        if self.map[y+1][x] != " ": break
       elif self.player.orientation == Direction.EAST:
         x += 1
-        if self.map[y][x-1] != " ":
-          break
+        if self.map[y][x-1] != " ": break
       elif self.player.orientation == Direction.SOUTH:
         y += 1
-        if self.map[y-1][x] != " ":
-          break
+        if self.map[y-1][x] != " ": break
       elif self.player.orientation == Direction.WEST:
         x -= 1
-        if self.map[y][x+1] != " ":
-          break
-      if distance_to_obstacle > self.render_distance:
-        break
-      if self.map[y][x] == "_" and obstacle_type == "#":
-        break
-      elif self.map[y][x] == "#" and obstacle_type == "_":
-        break
+        if self.map[y][x+1] != " ": break
+      if distance_to_obstacle > self.render_distance: break
+      if self.map[y][x] == "_" and obstacle_type == "#": break
+      elif self.map[y][x] == "#" and obstacle_type == "_": break
       elif self.map[y][x] == obstacle_type:
         obstacle = True
         break
@@ -122,18 +102,12 @@ class Renderer():
     pyxel.line(left, self.middle["y"] - obstacle_height / 2, right, self.middle["y"] - obstacle_height / 2, 12)
     pyxel.line(left, self.middle["y"] + obstacle_height / 2, right, self.middle["y"] + obstacle_height / 2, 12)
 
-  def draw_side(self, distance, x0, y0, side, color):
-    x, y = x0, y0
-    if self.player.orientation == Direction.NORTH:
-      x -= side
-    elif self.player.orientation == Direction.EAST:
-      y -= side
-    elif self.player.orientation == Direction.SOUTH:
-      x += side
-    elif self.player.orientation == Direction.WEST:
-      y += side
-    if self.map[y][x] != " ":
-      return
+  def draw_side(self, distance, x, y, side, color):
+    if self.player.orientation == Direction.NORTH: x -= side
+    elif self.player.orientation == Direction.EAST: y -= side
+    elif self.player.orientation == Direction.SOUTH: x += side
+    elif self.player.orientation == Direction.WEST: y += side
+    if self.map[y][x] != " ": return
     
     obstacle_height = self.wall_height / (1+distance)
     oh2 = self.wall_height / (2+distance)
