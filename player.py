@@ -5,33 +5,19 @@ class Player:
     self.orientation = orientation
     self.map = map
 
-  def move_forward(self):
+  def move(self, direction = 1):
     if self.orientation == 0:
-      if self.map[self.y - 1][self.x] == " ":
-        self.y -= 1
+      if self.map[self.y - direction][self.x] == " ":
+        self.y -= direction
     elif self.orientation == 90:
-      if self.map[self.y][self.x + 1] == " ":
-        self.x += 1
+      if self.map[self.y][self.x + direction] == " ":
+        self.x += direction
     elif self.orientation == 180:
-      if self.map[self.y + 1][self.x] == " ":
-        self.y += 1
+      if self.map[self.y + direction][self.x] == " ":
+        self.y += direction
     elif self.orientation == 270:
-      if self.map[self.y][self.x - 1] == " ":
-        self.x -= 1
-
-  def move_backward(self):
-    if self.orientation == 0: 
-      if self.map[self.y + 1][self.x] == " ":
-        self.y += 1
-    elif self.orientation == 90:
-      if self.map[self.y][self.x - 1] == " ":
-        self.x -= 1
-    elif self.orientation == 180:
-      if self.map[self.y - 1][self.x] == " ":
-        self.y -= 1
-    elif self.orientation == 270:
-      if self.map[self.y][self.x + 1] == " ":
-        self.x += 1
+      if self.map[self.y][self.x - direction] == " ":
+        self.x -= direction
 
   def rotate_left(self):
     self.orientation = (self.orientation - 90) % 360
