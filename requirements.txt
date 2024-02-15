@@ -1,7 +1,9 @@
-certifi==2023.11.17
-charset-normalizer==3.3.2
-idna==3.6
-Pillow==10.1.0
+altgraph==0.17.4
+packaging==23.2
+pefile==2023.2.7
+pyinstaller==6.4.0
+pyinstaller-hooks-contrib==2024.1
+pywin32-ctypes==0.2.2
 pyxel==2.0.7
 PyYAML==6.0.1
-setuptools==68.0.0
+setuptools==69.1.0
