@@ -3,8 +3,8 @@ import yaml
 
 class Config:
   def __init__(self, dev_mode=False):
-    gamefolder = "" if dev_mode else os.path.dirname(os.path.realpath(__file__))
-    self.configfile = gamefolder + "/assets/config.yaml"
+    gamefolder = "" if dev_mode else os.path.dirname(os.path.realpath(__file__)) + "/"
+    self.configfile = gamefolder + "assets/config.yaml"
     if not os.path.exists(self.configfile):
       with open(self.configfile, "w") as file:
         file.write("config:\n  resolution: 640x360\n  frame_rate: 30\n  render_distance: 10\n  max_walls: 10\n  fullscreen: false\ncolors:\n  _: 7\n  #: 8\nassets:\n  map: assets/map.txt\n")

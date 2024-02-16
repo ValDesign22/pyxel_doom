@@ -9,7 +9,7 @@ from renderer import Renderer
 
 class App:
   def __init__(self):
-    self.dev_mode = False
+    self.dev_mode = True
     self.config = Config(self.dev_mode)
     self.resolution = self.config.get("config.resolution").split("x")
 
@@ -35,6 +35,8 @@ class App:
     self.debug = False
     self.render_distance = self.config.get("config.render_distance")
     self.started_time = time.time()
+    self.counter = 0
+    self.fps = self.config.get("config.frame_rate")
     self.game_paused = False
     self.settings_shown = False
     self.current_button = 0
@@ -62,6 +64,12 @@ class App:
 
   # Game loop
   def update(self):
+    self.counter += 1
+    if (time.time() - self.started_time) > 1:
+      self.fps = self.counter / (time.time() - self.started_time)
+      self.counter = 0
+      self.started_time = time.time()
+
     # Menu
     if pyxel.btnp(pyxel.KEY_F1) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_BACK):
       self.debug = not self.debug
@@ -194,7 +202,7 @@ class App:
         if (
           self.resolution != self.config.get("config.resolution").split("x")
         ) or (
-          math.ceil(pyxel.frame_count / (time.time() - self.started_time)) != self.config.get("config.frame_rate")
+          math.ceil(self.fps) != self.config.get("config.frame_rate")
         ):
           pyxel.text(self.middle["x"] - 64, self.middle["y"], "Need restart", 8)
         self.save_button.draw()
@@ -258,7 +266,7 @@ class App:
       # Profiling
       pyxel.text(pyxel.width - 48, 4, f"{self.player.x}, {self.player.y}", 7)
       pyxel.text(pyxel.width - 48, 12, f"{"North" if self.player.orientation == 0 else "East" if self.player.orientation == 90 else "South" if self.player.orientation == 180 else "West"}", 7)
-      pyxel.text(pyxel.width - 48, 20, f"{(pyxel.frame_count/(time.time() - self.started_time)):.2f} FPS", 7)
+      pyxel.text(pyxel.width - 48, 20, f"{math.ceil(self.fps)} FPS", 7)
 
   # Button actions
   def settings(self):
