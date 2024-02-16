@@ -39,7 +39,7 @@ class Renderer():
 
     if orientation == Direction.NORTH: x += row
     elif orientation == Direction.EAST: y += row
-    elif orientation == Direction.SOUTH: x += row
+    elif orientation == Direction.SOUTH: x -= row
     elif orientation == Direction.WEST: y -= row
     if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map): return
 

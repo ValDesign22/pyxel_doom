@@ -9,7 +9,8 @@ from renderer import Renderer
 
 class App:
   def __init__(self):
-    self.config = Config()
+    self.dev_mode = False
+    self.config = Config(self.dev_mode)
     self.resolution = self.config.get("config.resolution").split("x")
 
     pyxel.init(
