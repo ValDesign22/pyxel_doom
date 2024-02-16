@@ -24,7 +24,7 @@ class App:
     # Map
     self.colors = self.config.get("colors")
     self.middle = { "x": pyxel.width // 2, "y": pyxel.height // 2 }
-    self.floor_size = 2
+    self.floor_size = pyxel.width // pyxel.height * 4
     self.wall_height = pyxel.height // 2
     self.map = open(self.config.get("assets.map")).read().split("\n")
     
@@ -150,6 +150,7 @@ class App:
   def draw(self):
     pyxel.cls(0)
 
+    # Pause and settings menu
     if self.game_paused:
       # Draw buttons
       if self.settings_shown == False:
@@ -170,11 +171,6 @@ class App:
           self.quit_button.focus()
 
       else:
-        """
-        Render distance ^ 8 v
-        Frame rate ^ 60 v
-        Resolution ^ 640x360 v      
-        """
         # Render distance
         pyxel.text(self.middle["x"] - 32, self.middle["y"] - 64, "Settings", 7)
         pyxel.text(self.middle["x"] - 64, self.middle["y"] - 48, "Render distance", 7)
@@ -245,7 +241,6 @@ class App:
           self.current_button = 3
           self.save_button.focus()
           self.gamepad_pressed = False
-
 
       return
     
