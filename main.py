@@ -17,8 +17,7 @@ class App:
       width=int(self.resolution[0]),
       height=int(self.resolution[1]),
       title="Pyxel Doom",
-      fps=self.config.get("config.frame_rate"),
-      quit_key=None,
+      fps=self.config.get("config.frame_rate")
     )
 
     # Map
