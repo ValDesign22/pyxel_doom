@@ -5,7 +5,7 @@ import time
 from button import ArrowButton, Button
 from config import Config
 from player import Player
-from renderer import Renderer
+from renderer import Direction, Renderer
 
 class App:
   def __init__(self):
@@ -29,6 +29,17 @@ class App:
     
     # Player
     self.player = Player(len(self.map[0]) // 2, len(self.map) // 2, 0, self.map)
+    if self.map[self.player.y][self.player.x] == "#":
+      for y, row in enumerate(self.map):
+        for x, tile in enumerate(row):
+          if tile == " ":
+            self.player.x = x
+            self.player.y = y
+            break
+        else:
+          continue
+        break
+    self.block = (x:= self.player.x, y:= self.player.y)
 
     # Parameters
     self.debug = False
@@ -154,6 +165,16 @@ class App:
     self.player.x = max(0, min(len(self.map[0]) - 1, self.player.x))
     self.player.y = max(0, min(len(self.map) - 1, self.player.y))
 
+    block_x, block_y = self.player.x, self.player.y
+    if self.player.orientation == Direction.NORTH: block_y -= 1
+    elif self.player.orientation == Direction.EAST: block_x += 1
+    elif self.player.orientation == Direction.SOUTH: block_y += 1
+    elif self.player.orientation == Direction.WEST: block_x -= 1
+    if block_x < 0 or block_x >= len(self.map[0]) or block_y < 0 or block_y >= len(self.map): return
+    if self.map[block_y][block_x] == "_":
+      if pyxel.btnp(pyxel.KEY_E) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_Y):
+        self.map[block_y] = self.map[block_y][:block_x] + " " + self.map[block_y][block_x + 1:] 
+
   def draw(self):
     pyxel.cls(0)
 
@@ -253,6 +274,15 @@ class App:
     
     # Draw elements
     self.renderer.draw()
+    
+    block_x, block_y = self.player.x, self.player.y
+    if self.player.orientation == Direction.NORTH: block_y -= 1
+    elif self.player.orientation == Direction.EAST: block_x += 1
+    elif self.player.orientation == Direction.SOUTH: block_y += 1
+    elif self.player.orientation == Direction.WEST: block_x -= 1
+    if block_x < 0 or block_x >= len(self.map[0]) or block_y < 0 or block_y >= len(self.map): return
+    if self.map[block_y][block_x] == "_":
+     pyxel.text(self.middle["x"] - 20, self.middle["y"] + 64, "[E] Open door", 7)
 
     # Draw debug
     if self.debug:

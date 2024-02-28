@@ -7,6 +7,6 @@ colors:
 config:
   frame_rate: 60
   fullscreen: false
-  max_walls: 10
-  render_distance: 19
+  max_walls: 15
+  render_distance: 20
   resolution: 640x360
