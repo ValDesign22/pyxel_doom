@@ -1,7 +1,7 @@
 from renderer import Direction
 
 class Player:
-  def __init__(self, x, y, orientation, map):
+  def __init__(self, x, y, orientation, map, fps):
     self.x = x
     self.y = y
     self.orientation = orientation
@@ -10,7 +10,8 @@ class Player:
       "y": 0,
       "x": 0,
     }
-    self.step_size = 10
+    self.step_size = (fps / (fps / 25)) if fps > 30 else fps
+    print(self.step_size)
 
   def move(self, direction = 1):
     if self.orientation == Direction.NORTH:

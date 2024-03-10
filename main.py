@@ -28,7 +28,7 @@ class App:
     self.map = open(self.config.get("assets.map")).read().split("\n")
     
     # Player
-    self.player = Player(len(self.map[0]) // 2, len(self.map) // 2, 0, self.map)
+    self.player = Player(len(self.map[0]) // 2, len(self.map) // 2, 0, self.map, self.config.get("config.frame_rate"))
     if self.map[self.player.y][self.player.x] == "#":
       for y, row in enumerate(self.map):
         for x, tile in enumerate(row):
@@ -290,7 +290,12 @@ class App:
       for y, row in enumerate(self.map):
         for x, tile in enumerate(row):
           pyxel.rect(x * self.floor_size, y * self.floor_size, self.floor_size, self.floor_size, self.colors[tile])
-      pyxel.rect(self.player.x * self.floor_size, self.player.y * self.floor_size, self.floor_size, self.floor_size, 9)
+      playerx, playery = self.player.x * self.floor_size, self.player.y * self.floor_size
+      stepx = self.player.step["x"]
+      stepy = -self.player.step["y"]
+      playerx += (stepx / self.player.step_size) * self.floor_size
+      playery += (stepy / self.player.step_size) * self.floor_size
+      pyxel.rect(playerx, playery, self.floor_size, self.floor_size, 9)
 
       # Profiling
       pyxel.text(pyxel.width - 48, 4, f"{self.player.x}, {self.player.y}", 7)
