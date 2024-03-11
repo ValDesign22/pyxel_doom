@@ -31,7 +31,6 @@ class Player:
       elif self.orientation == Direction.EAST or self.orientation == Direction.WEST:
         self.step[axis] += 1 * direction
 
-
   def update_pos(self, axis, delta):
     if axis == "x":
       self.x += delta
@@ -50,8 +49,5 @@ class Player:
         self.update_step("x", -direction)
       self.last_time = time.time()
 
-  def rotate_left(self):
-    self.orientation = (self.orientation - 90) % 360
-
-  def rotate_right(self):
-    self.orientation = (self.orientation + 90) % 360
+  def rotate(self, direction):
+    self.orientation = (self.orientation + 90 * direction) % 360

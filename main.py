@@ -158,9 +158,9 @@ class App:
     if pyxel.btn(pyxel.KEY_S) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN):
       self.player.move(-1)
     if pyxel.btnp(pyxel.KEY_Q) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT):
-      self.player.rotate_left()
+      self.player.rotate(-1)
     if pyxel.btnp(pyxel.KEY_D) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT):
-      self.player.rotate_right()
+      self.player.rotate(1)
 
     self.player.x = max(0, min(len(self.map[0]) - 1, self.player.x))
     self.player.y = max(0, min(len(self.map) - 1, self.player.y))
@@ -286,17 +286,6 @@ class App:
 
     # Draw debug
     if self.debug:
-      # Draw minimap
-      for y, row in enumerate(self.map):
-        for x, tile in enumerate(row):
-          pyxel.rect(x * self.floor_size, y * self.floor_size, self.floor_size, self.floor_size, self.colors[tile])
-      playerx, playery = self.player.x * self.floor_size, self.player.y * self.floor_size
-      stepx = self.player.step["x"]
-      stepy = -self.player.step["y"]
-      playerx += (stepx / self.player.step_size) * self.floor_size
-      playery += (stepy / self.player.step_size) * self.floor_size
-      pyxel.rect(playerx, playery, self.floor_size, self.floor_size, 9)
-
       # Profiling
       pyxel.text(pyxel.width - 48, 4, f"{self.player.x}, {self.player.y}", 7)
       pyxel.text(pyxel.width - 48, 12, f"{"North" if self.player.orientation == 0 else "East" if self.player.orientation == 90 else "South" if self.player.orientation == 180 else "West"}", 7)
