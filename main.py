@@ -28,7 +28,7 @@ class App:
     self.map = open(self.config.get("assets.map")).read().split("\n")
     
     # Player
-    self.player = Player(len(self.map[0]) // 2, len(self.map) // 2, 0, self.map)
+    self.player = Player(len(self.map[0]) // 2, len(self.map) // 2, 0, self.map, self.config.get("config.player_speed"))
     if self.map[self.player.y][self.player.x] == "#":
       for y, row in enumerate(self.map):
         for x, tile in enumerate(row):

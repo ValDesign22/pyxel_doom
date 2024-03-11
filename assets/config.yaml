@@ -3,10 +3,11 @@ assets:
 colors:
   ' ': 0
   '#': 4
-  _: 7
+  '_': 7
 config:
   frame_rate: 60
   fullscreen: false
   max_walls: 15
   render_distance: 20
   resolution: 640x360
+  player_speed: 10

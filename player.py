@@ -2,7 +2,7 @@ from renderer import Direction
 import time
 
 class Player:
-  def __init__(self, x, y, orientation, map):
+  def __init__(self, x, y, orientation, map, speed):
     self.x = x
     self.y = y
     self.orientation = orientation
@@ -11,7 +11,7 @@ class Player:
       "y": 0,
       "x": 0,
     }
-    self.step_size = 10
+    self.step_size = speed
     self.time_step = 1 / (self.step_size * 5)
     self.last_time = 0
 
