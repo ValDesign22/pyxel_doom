@@ -16,45 +16,39 @@ class Player:
     self.last_time = 0
 
   def can_move(self):
-    # Check if the player can move from the last_time and the step_size
     if time.time() - self.last_time > self.time_step:
       self.last_time = time.time()
       return True
     return False
+  
+  def update_step(self, axis, direction):
+    if self.step[axis] in [-self.step_size, self.step_size]:
+      self.step[axis] = 0
+      self.update_pos(axis, direction)
+    else:
+      if self.orientation == Direction.NORTH or self.orientation == Direction.SOUTH:
+        self.step[axis] -= 1 * direction
+      elif self.orientation == Direction.EAST or self.orientation == Direction.WEST:
+        self.step[axis] += 1 * direction
+
+
+  def update_pos(self, axis, delta):
+    if axis == "x":
+      self.x += delta
+    elif axis == "y":
+      self.y += delta
 
   def move(self, direction = 1):
-    if self.orientation == Direction.NORTH:
-      if self.map[self.y - direction][self.x] == " " and self.can_move():
-        if self.step["y"] in [-self.step_size, self.step_size]:
-          self.y -= direction
-          self.step["y"] = 0
-        else:
-          self.step["y"] += 1 * direction
-        self.last_time = time.time()
-    elif self.orientation == Direction.EAST:
-      if self.map[self.y][self.x + direction] == " " and self.can_move():
-        if self.step["x"] in [-self.step_size, self.step_size]:
-          self.x += direction
-          self.step["x"] = 0
-        else:
-          self.step["x"] += 1 * direction
-        self.last_time = time.time()
-    elif self.orientation == Direction.SOUTH:
-      if self.map[self.y + direction][self.x] == " " and self.can_move():
-        if self.step["y"] in [-self.step_size, self.step_size]:
-          self.y += direction
-          self.step["y"] = 0
-        else:
-          self.step["y"] -= 1 * direction
-        self.last_time = time.time()
-    elif self.orientation == Direction.WEST:
-      if self.map[self.y][self.x - direction] == " " and self.can_move():
-        if self.step["x"] in [-self.step_size, self.step_size]:
-          self.x -= direction
-          self.step["x"] = 0
-        else:
-          self.step["x"] -= 1 * direction
-        self.last_time = time.time()
+    if self.can_move():
+      if self.orientation == Direction.NORTH and self.map[self.y - direction][self.x] == " ":
+        self.update_step("y", -direction)
+      elif self.orientation == Direction.EAST and self.map[self.y][self.x + direction] == " ":
+        self.update_step("x", direction)
+      elif self.orientation == Direction.SOUTH and self.map[self.y + direction][self.x] == " ":
+        self.update_step("y", direction)
+      elif self.orientation == Direction.WEST and self.map[self.y][self.x - direction] == " ":
+        self.update_step("x", -direction)
+      self.last_time = time.time()
 
   def rotate_left(self):
     self.orientation = (self.orientation - 90) % 360
