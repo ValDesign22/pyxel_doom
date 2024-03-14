@@ -7,7 +7,7 @@ class Config:
     self.configfile = gamefolder + "assets/config.yaml"
     if not os.path.exists(self.configfile):
       with open(self.configfile, "w") as file:
-        file.write("config:\n  resolution: 640x360\n  frame_rate: 30\n  render_distance: 10\n  max_walls: 10\n  fullscreen: false\ncolors:\n  _: 7\n  #: 8\nassets:\n  map: assets/map.txt\n")
+        file.write("config:\n  resolution: 640x360\n  frame_rate: 30\n  render_distance: 10\n  max_walls: 10\n  fullscreen: false\ncolors:\n  'D': 7\n  #: 8\nassets:\n  map: assets/map.txt\n")
     
     with open(self.configfile, "r") as file:
       self.data = yaml.safe_load(file)

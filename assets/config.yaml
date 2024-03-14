@@ -3,7 +3,7 @@ assets:
 colors:
   ' ': 0
   '#': 4
-  _: 7
+  'D': 7
 config:
   frame_rate: 60
   fullscreen: false

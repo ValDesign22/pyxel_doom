@@ -4,6 +4,7 @@ import time
 
 from button import ArrowButton, Button
 from config import Config
+from item import DoorKey
 from player import Player
 from renderer import Direction, Renderer
 
@@ -68,6 +69,14 @@ class App:
     self.frate_btn_up = ArrowButton(self.middle["x"] + 32, self.middle["y"] - 34, 8, 8, 7, 7, lambda: self.change_frame_rate("up"), "up")
     self.res_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 18, 8, 8, 7, 7, lambda: self.change_resolution("down"), "down")
     self.res_btn_up = ArrowButton(self.middle["x"] + 48, self.middle["y"] - 18, 8, 8, 7, 7, lambda: self.change_resolution("up"), "up")
+
+    self.key1 = DoorKey("Key 1", (4, 21), (5, 5))
+
+    # print all doors coord on the map
+    for y, row in enumerate(self.map):
+      for x, tile in enumerate(row):
+        if tile == "_":
+          print(f"Door at {x}, {y}")
 
     pyxel.fullscreen(self.fullscreen)
     pyxel.run(self.update, self.draw)
