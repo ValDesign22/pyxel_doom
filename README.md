@@ -21,6 +21,7 @@ python main.py
 - S, DPad Down: Move backward
 - Q, DPad Left: Turn left
 - D, DPad Right: Turn right
+- LEFT_SHIFT, X: Sprint
 - F1, Back: Show debug information
 - F2, Start: Open the menu
 - F3: Change rendering mode
