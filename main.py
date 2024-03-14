@@ -161,6 +161,7 @@ class App:
       self.player.rotate(-1)
     if pyxel.btnp(pyxel.KEY_D) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT):
       self.player.rotate(1)
+    self.player.sprint(pyxel.btn(pyxel.KEY_LSHIFT) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_X))
 
     self.player.x = max(0, min(len(self.map[0]) - 1, self.player.x))
     self.player.y = max(0, min(len(self.map) - 1, self.player.y))

@@ -15,6 +15,9 @@ class Player:
     self.time_step = 1 / (self.step_size * 5)
     self.last_time = 0
 
+  def sprint(self, pressed):
+    self.time_step = 1 / (self.step_size * (10 if pressed else 5))
+
   def can_move(self):
     if time.time() - self.last_time > self.time_step:
       self.last_time = time.time()
