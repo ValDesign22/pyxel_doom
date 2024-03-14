@@ -67,7 +67,7 @@ class Renderer():
     step=0
     front_step = 0
     if self.player.orientation == Direction.NORTH or self.player.orientation == Direction.SOUTH:
-      step = self.player.step["x"]
+      step = -self.player.step["x"]
       front_step = self.player.step["y"] if self.player.orientation == Direction.NORTH else -self.player.step["y"]
     elif self.player.orientation == Direction.EAST or self.player.orientation == Direction.WEST:
       step = self.player.step["y"]
@@ -88,7 +88,7 @@ class Renderer():
     step = 0
     front_step = 0
     if self.player.orientation == Direction.NORTH or self.player.orientation == Direction.SOUTH:
-      step = self.player.step["x"]
+      step = -self.player.step["x"]
       front_step = self.player.step["y"] if self.player.orientation == Direction.NORTH else -self.player.step["y"]
     elif self.player.orientation == Direction.EAST or self.player.orientation == Direction.WEST:
       step = self.player.step["y"]

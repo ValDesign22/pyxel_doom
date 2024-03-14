@@ -1,13 +1,14 @@
 assets:
   map: assets/map.txt
+  resources: assets/resources.pyxres
 colors:
   ' ': 0
   '#': 4
-  'D': 7
+  D: 7
 config:
   frame_rate: 60
   fullscreen: false
-  max_walls: 15
+  max_walls: 10
   player_speed: 10
-  render_distance: 20
+  render_distance: 10
   resolution: 640x360

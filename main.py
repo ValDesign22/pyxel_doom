@@ -21,6 +21,8 @@ class App:
       fps=self.config.get("config.frame_rate")
     )
 
+    pyxel.load(self.config.get("assets.resources"))
+
     # Map
     self.colors = self.config.get("colors")
     self.middle = { "x": pyxel.width // 2, "y": pyxel.height // 2 }
