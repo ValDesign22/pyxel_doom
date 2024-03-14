@@ -178,9 +178,7 @@ class App:
 
     # Collect keys
     for key in self.keys:
-      if key.collect(self.player, self.map):
-        print(f"Collected {key.name}")
-        print(self.map[key.y])
+      key.collect(self.player, self.map)
 
     block_x, block_y = self.player.x, self.player.y
     if self.player.orientation == Direction.NORTH: block_y -= 1
