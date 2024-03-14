@@ -57,7 +57,7 @@ class Renderer():
       elif self.player.orientation == Direction.SOUTH: y -= 1
       elif self.player.orientation == Direction.WEST: x += 1
       if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map): break
-      if self.map[y][x] != " ":
+      if self.map[y][x] not in [" ", "K"]:
         self.draw_obstacle(distance, x, y, row)
         if row != 0:
           self.draw_side(distance, x, y, row)

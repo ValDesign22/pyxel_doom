@@ -42,13 +42,13 @@ class Player:
 
   def move(self, direction = 1):
     if self.can_move():
-      if self.orientation == Direction.NORTH and self.map[self.y - direction][self.x] == " ":
+      if self.orientation == Direction.NORTH and self.map[self.y - direction][self.x] in [" ", "K"]:
         self.update_step("y", -direction)
-      elif self.orientation == Direction.EAST and self.map[self.y][self.x + direction] == " ":
+      elif self.orientation == Direction.EAST and self.map[self.y][self.x + direction] in [" ", "K"]:
         self.update_step("x", direction)
-      elif self.orientation == Direction.SOUTH and self.map[self.y + direction][self.x] == " ":
+      elif self.orientation == Direction.SOUTH and self.map[self.y + direction][self.x] in [" ", "K"]:
         self.update_step("y", direction)
-      elif self.orientation == Direction.WEST and self.map[self.y][self.x - direction] == " ":
+      elif self.orientation == Direction.WEST and self.map[self.y][self.x - direction] in [" ", "K"]:
         self.update_step("x", -direction)
       self.last_time = time.time()
 

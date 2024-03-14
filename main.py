@@ -72,14 +72,12 @@ class App:
     self.res_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 18, 8, 8, 7, 7, lambda: self.change_resolution("down"), "down")
     self.res_btn_up = ArrowButton(self.middle["x"] + 48, self.middle["y"] - 18, 8, 8, 7, 7, lambda: self.change_resolution("up"), "up")
 
+    # Keys
     self.keys = [
       DoorKey("Key 1", (4, 20), (5, 5)),
     ]
-
-    # place keys on the map
     for key in self.keys:
-      print(key.x, key.y)
-      self.map[key.y] = self.map[key.y][:key.x] + "D" + self.map[key.y][key.x + 1:]
+      self.map[key.y] = self.map[key.y][:key.x] + "K" + self.map[key.y][key.x + 1:]
 
     pyxel.fullscreen(self.fullscreen)
     pyxel.run(self.update, self.draw)
@@ -177,6 +175,12 @@ class App:
 
     self.player.x = max(0, min(len(self.map[0]) - 1, self.player.x))
     self.player.y = max(0, min(len(self.map) - 1, self.player.y))
+
+    # Collect keys
+    for key in self.keys:
+      if key.collect(self.player, self.map):
+        print(f"Collected {key.name}")
+        print(self.map[key.y])
 
     block_x, block_y = self.player.x, self.player.y
     if self.player.orientation == Direction.NORTH: block_y -= 1
