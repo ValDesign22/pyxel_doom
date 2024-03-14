@@ -25,8 +25,8 @@ class Button():
     return False
   
 class ArrowButton(Button):
-  def __init__(self, x, y, width, height, color, text, text_color, action, direction):
-    super().__init__(x, y, width, height, color, text, text_color, action)
+  def __init__(self, x, y, width, height, color, text_color, action, direction):
+    super().__init__(x, y, width, height, color, "", text_color, action)
     self.direction = direction
 
   def draw(self):

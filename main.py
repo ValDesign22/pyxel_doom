@@ -62,12 +62,12 @@ class App:
     self.save_button = Button(self.middle["x"] - 32, self.middle["y"] + 16, 64, 16, 7, "Save and close", 7, self.save_settings)
 
     # Settings Buttons
-    self.rdist_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 50, 8, 8, 7, "", 7, lambda: self.change_render_distance("down"), "down")
-    self.rdist_btn_up = ArrowButton(self.middle["x"] + 32, self.middle["y"] - 50, 8, 8, 7, "", 7, lambda: self.change_render_distance("up"), "up")
-    self.frate_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 34, 8, 8, 7, "", 7, lambda: self.change_frame_rate("down"), "down")
-    self.frate_btn_up = ArrowButton(self.middle["x"] + 32, self.middle["y"] - 34, 8, 8, 7, "", 7, lambda: self.change_frame_rate("up"), "up")
-    self.res_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 18, 8, 8, 7, "", 7, lambda: self.change_resolution("down"), "down")
-    self.res_btn_up = ArrowButton(self.middle["x"] + 48, self.middle["y"] - 18, 8, 8, 7, "", 7, lambda: self.change_resolution("up"), "up")
+    self.rdist_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 50, 8, 8, 7, 7, lambda: self.change_render_distance("down"), "down")
+    self.rdist_btn_up = ArrowButton(self.middle["x"] + 32, self.middle["y"] - 50, 8, 8, 7, 7, lambda: self.change_render_distance("up"), "up")
+    self.frate_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 34, 8, 8, 7, 7, lambda: self.change_frame_rate("down"), "down")
+    self.frate_btn_up = ArrowButton(self.middle["x"] + 32, self.middle["y"] - 34, 8, 8, 7, 7, lambda: self.change_frame_rate("up"), "up")
+    self.res_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 18, 8, 8, 7, 7, lambda: self.change_resolution("down"), "down")
+    self.res_btn_up = ArrowButton(self.middle["x"] + 48, self.middle["y"] - 18, 8, 8, 7, 7, lambda: self.change_resolution("up"), "up")
 
     pyxel.fullscreen(self.fullscreen)
     pyxel.run(self.update, self.draw)
