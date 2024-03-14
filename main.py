@@ -70,13 +70,7 @@ class App:
     self.res_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 18, 8, 8, 7, 7, lambda: self.change_resolution("down"), "down")
     self.res_btn_up = ArrowButton(self.middle["x"] + 48, self.middle["y"] - 18, 8, 8, 7, 7, lambda: self.change_resolution("up"), "up")
 
-    self.key1 = DoorKey("Key 1", (4, 21), (5, 5))
-
-    # print all doors coord on the map
-    for y, row in enumerate(self.map):
-      for x, tile in enumerate(row):
-        if tile == "_":
-          print(f"Door at {x}, {y}")
+    self.doorkey = DoorKey("Key 1", (4, 20), (5, 5))
 
     pyxel.fullscreen(self.fullscreen)
     pyxel.run(self.update, self.draw)
@@ -181,7 +175,7 @@ class App:
     elif self.player.orientation == Direction.SOUTH: block_y += 1
     elif self.player.orientation == Direction.WEST: block_x -= 1
     if block_x < 0 or block_x >= len(self.map[0]) or block_y < 0 or block_y >= len(self.map): return
-    if self.map[block_y][block_x] == "_":
+    if self.map[block_y][block_x] == "D":
       if pyxel.btnp(pyxel.KEY_E) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_Y):
         self.map[block_y] = self.map[block_y][:block_x] + " " + self.map[block_y][block_x + 1:] 
 
@@ -291,7 +285,7 @@ class App:
     elif self.player.orientation == Direction.SOUTH: block_y += 1
     elif self.player.orientation == Direction.WEST: block_x -= 1
     if block_x < 0 or block_x >= len(self.map[0]) or block_y < 0 or block_y >= len(self.map): return
-    if self.map[block_y][block_x] == "_":
+    if self.map[block_y][block_x] == "D":
      pyxel.text(self.middle["x"] - 20, self.middle["y"] + 64, "[E] Open door", 7)
 
     # Draw debug
