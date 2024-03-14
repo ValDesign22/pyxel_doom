@@ -16,7 +16,7 @@ class App:
     pyxel.init(
       width=int(self.resolution[0]),
       height=int(self.resolution[1]),
-      title="Pyxel Doom",
+      title="Pyxel",
       fps=self.config.get("config.frame_rate")
     )
 
