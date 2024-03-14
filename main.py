@@ -72,7 +72,14 @@ class App:
     self.res_btn_down = ArrowButton(self.middle["x"], self.middle["y"] - 18, 8, 8, 7, 7, lambda: self.change_resolution("down"), "down")
     self.res_btn_up = ArrowButton(self.middle["x"] + 48, self.middle["y"] - 18, 8, 8, 7, 7, lambda: self.change_resolution("up"), "up")
 
-    self.doorkey = DoorKey("Key 1", (4, 20), (5, 5))
+    self.keys = [
+      DoorKey("Key 1", (4, 20), (5, 5)),
+    ]
+
+    # place keys on the map
+    for key in self.keys:
+      print(key.x, key.y)
+      self.map[key.y] = self.map[key.y][:key.x] + "D" + self.map[key.y][key.x + 1:]
 
     pyxel.fullscreen(self.fullscreen)
     pyxel.run(self.update, self.draw)
@@ -179,7 +186,13 @@ class App:
     if block_x < 0 or block_x >= len(self.map[0]) or block_y < 0 or block_y >= len(self.map): return
     if self.map[block_y][block_x] == "D":
       if pyxel.btnp(pyxel.KEY_E) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_Y):
-        self.map[block_y] = self.map[block_y][:block_x] + " " + self.map[block_y][block_x + 1:] 
+        door_key = None
+        for key in self.keys:
+          if key.door[1] == block_x and key.door[0] == block_y:
+            door_key = key
+            break
+        if door_key and door_key.collected:
+          self.map[block_y] = self.map[block_y][:block_x] + " " + self.map[block_y][block_x + 1:]
 
   def draw(self):
     pyxel.cls(0)
@@ -288,7 +301,15 @@ class App:
     elif self.player.orientation == Direction.WEST: block_x -= 1
     if block_x < 0 or block_x >= len(self.map[0]) or block_y < 0 or block_y >= len(self.map): return
     if self.map[block_y][block_x] == "D":
-     pyxel.text(self.middle["x"] - 20, self.middle["y"] + 64, "[E] Open door", 7)
+      door_key = None
+      for key in self.keys:
+        if key.door[1] == block_x and key.door[0] == block_y:
+          door_key = key
+          break
+      if door_key and door_key.collected:
+        pyxel.text(self.middle["x"] - 20, self.middle["y"] + 64, "[E] Open door", 7)
+      else:
+        pyxel.text(self.middle["x"] - 20, self.middle["y"] + 64, f"Collect {door_key.name} first", 7)
 
     # Draw debug
     if self.debug:
