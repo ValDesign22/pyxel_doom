@@ -57,7 +57,7 @@ class Renderer():
       elif self.player.orientation == Direction.SOUTH: y -= 1
       elif self.player.orientation == Direction.WEST: x += 1
       if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map): break
-      if self.map[y][x] not in [" ", "K"]:
+      if self.map[y][x] != " ":
         self.draw_obstacle(distance, x, y, row)
         if row != 0:
           self.draw_side(distance, x, y, row)
@@ -77,52 +77,58 @@ class Renderer():
     right = self.middle["x"] + obstacle_height / 2 + row * obstacle_height
     left += step * obstacle_height / self.player.step_size
     right += step * obstacle_height / self.player.step_size
-    color = self.colors.get(self.map[y][x], 0)
-    if self.render_mode =="3D": pyxel.rect(left, self.middle["y"] - obstacle_height / 2, right - left, obstacle_height, color)
-    pyxel.line(left, self.middle["y"] - obstacle_height / 2, left, self.middle["y"] + obstacle_height / 2, 12)
-    pyxel.line(right, self.middle["y"] - obstacle_height / 2, right, self.middle["y"] + obstacle_height / 2, 12)
-    pyxel.line(left, self.middle["y"] - obstacle_height / 2, right, self.middle["y"] - obstacle_height / 2, 12)
-    pyxel.line(left, self.middle["y"] + obstacle_height / 2, right, self.middle["y"] + obstacle_height / 2, 12)
+    if self.map[y][x] not in [" ", "K"]:
+      color = self.colors.get(self.map[y][x], 0)
+      if self.render_mode =="3D": pyxel.rect(left, self.middle["y"] - obstacle_height / 2, right - left, obstacle_height, color)
+      pyxel.line(left, self.middle["y"] - obstacle_height / 2, left, self.middle["y"] + obstacle_height / 2, 12)
+      pyxel.line(right, self.middle["y"] - obstacle_height / 2, right, self.middle["y"] + obstacle_height / 2, 12)
+      pyxel.line(left, self.middle["y"] - obstacle_height / 2, right, self.middle["y"] - obstacle_height / 2, 12)
+      pyxel.line(left, self.middle["y"] + obstacle_height / 2, right, self.middle["y"] + obstacle_height / 2, 12)
+    elif self.map[y][x] == "K":
+      key_x = left+obstacle_height/2
+      key_y = self.middle["y"]
+      pyxel.rect(key_x, key_y-5, 5, 20, 10)
   
   def draw_side(self, distance, x, y, row):
-    step = 0
-    front_step = 0
-    if self.player.orientation == Direction.NORTH or self.player.orientation == Direction.SOUTH:
-      step = -self.player.step["x"]
-      front_step = self.player.step["y"] if self.player.orientation == Direction.NORTH else -self.player.step["y"]
-    elif self.player.orientation == Direction.EAST or self.player.orientation == Direction.WEST:
-      step = self.player.step["y"]
-      front_step = self.player.step["x"] if self.player.orientation == Direction.EAST else -self.player.step["x"]
-    obstacle_height = self.wall_height / (1 + distance - front_step / self.player.step_size)
-    oh2 = self.wall_height / (2+distance - front_step / self.player.step_size)
-    color = self.colors.get(self.map[y][x], 0)
-    if row > 0:
-      top_left = self.middle["x"] - obstacle_height / 2 + row * obstacle_height
-      top_left2 = self.middle["x"] - oh2 / 2 + row * oh2
-      bottom_left = self.middle["x"] - obstacle_height / 2 + row * obstacle_height
-      bottom_left2 = self.middle["x"] - oh2 / 2 + row * oh2
-      top_left += step * obstacle_height / self.player.step_size
-      top_left2 += step * oh2 / self.player.step_size
-      bottom_left += step * obstacle_height / self.player.step_size
-      bottom_left2 += step * oh2 / self.player.step_size
-      if self.render_mode == "3D":
-        pyxel.tri(top_left, self.middle["y"] - obstacle_height / 2, top_left2, self.middle["y"] - oh2 / 2, top_left2, self.middle["y"] + oh2 / 2, color)
-        pyxel.tri(top_left, self.middle["y"] - obstacle_height / 2, bottom_left, self.middle["y"] + obstacle_height / 2, bottom_left2, self.middle["y"] + oh2 / 2, color)
-      pyxel.line(top_left, self.middle["y"] - obstacle_height / 2, top_left2, self.middle["y"] - oh2 / 2, 12)
-      pyxel.line(bottom_left, self.middle["y"] + obstacle_height / 2, bottom_left2, self.middle["y"] + oh2 / 2, 12)
-      pyxel.line(top_left2, self.middle["y"] - oh2 / 2, top_left2, self.middle["y"] + oh2 / 2, 12)
-    else:
-      top_right = self.middle["x"] + obstacle_height / 2 + row * obstacle_height
-      top_right2 = self.middle["x"] + oh2 / 2 + row * oh2
-      bottom_right = self.middle["x"] + obstacle_height / 2 + row * obstacle_height
-      bottom_right2 = self.middle["x"] + oh2 / 2 + row * oh2
-      top_right += step * obstacle_height / self.player.step_size
-      top_right2 += step * oh2 / self.player.step_size
-      bottom_right += step * obstacle_height / self.player.step_size
-      bottom_right2 += step * oh2 / self.player.step_size
-      if self.render_mode == "3D":
-        pyxel.tri(top_right, self.middle["y"] - obstacle_height / 2, top_right2, self.middle["y"] - oh2 / 2, top_right2, self.middle["y"] + oh2 / 2, color)
-        pyxel.tri(top_right, self.middle["y"] - obstacle_height / 2, bottom_right, self.middle["y"] + obstacle_height / 2, bottom_right2, self.middle["y"] + oh2 / 2, color)
-      pyxel.line(top_right, self.middle["y"] - obstacle_height / 2, top_right2, self.middle["y"] - oh2 / 2, 12)
-      pyxel.line(bottom_right, self.middle["y"] + obstacle_height / 2, bottom_right2, self.middle["y"] + oh2 / 2, 12)
-      pyxel.line(top_right2, self.middle["y"] - oh2 / 2, top_right2, self.middle["y"] + oh2 / 2, 12)
+    if self.map[y][x] not in [" ", "K"]:
+      step = 0
+      front_step = 0
+      if self.player.orientation == Direction.NORTH or self.player.orientation == Direction.SOUTH:
+        step = -self.player.step["x"]
+        front_step = self.player.step["y"] if self.player.orientation == Direction.NORTH else -self.player.step["y"]
+      elif self.player.orientation == Direction.EAST or self.player.orientation == Direction.WEST:
+        step = self.player.step["y"]
+        front_step = self.player.step["x"] if self.player.orientation == Direction.EAST else -self.player.step["x"]
+      obstacle_height = self.wall_height / (1 + distance - front_step / self.player.step_size)
+      oh2 = self.wall_height / (2+distance - front_step / self.player.step_size)
+      color = self.colors.get(self.map[y][x], 0)
+      if row > 0:
+        top_left = self.middle["x"] - obstacle_height / 2 + row * obstacle_height
+        top_left2 = self.middle["x"] - oh2 / 2 + row * oh2
+        bottom_left = self.middle["x"] - obstacle_height / 2 + row * obstacle_height
+        bottom_left2 = self.middle["x"] - oh2 / 2 + row * oh2
+        top_left += step * obstacle_height / self.player.step_size
+        top_left2 += step * oh2 / self.player.step_size
+        bottom_left += step * obstacle_height / self.player.step_size
+        bottom_left2 += step * oh2 / self.player.step_size
+        if self.render_mode == "3D":
+          pyxel.tri(top_left, self.middle["y"] - obstacle_height / 2, top_left2, self.middle["y"] - oh2 / 2, top_left2, self.middle["y"] + oh2 / 2, color)
+          pyxel.tri(top_left, self.middle["y"] - obstacle_height / 2, bottom_left, self.middle["y"] + obstacle_height / 2, bottom_left2, self.middle["y"] + oh2 / 2, color)
+        pyxel.line(top_left, self.middle["y"] - obstacle_height / 2, top_left2, self.middle["y"] - oh2 / 2, 12)
+        pyxel.line(bottom_left, self.middle["y"] + obstacle_height / 2, bottom_left2, self.middle["y"] + oh2 / 2, 12)
+        pyxel.line(top_left2, self.middle["y"] - oh2 / 2, top_left2, self.middle["y"] + oh2 / 2, 12)
+      else:
+        top_right = self.middle["x"] + obstacle_height / 2 + row * obstacle_height
+        top_right2 = self.middle["x"] + oh2 / 2 + row * oh2
+        bottom_right = self.middle["x"] + obstacle_height / 2 + row * obstacle_height
+        bottom_right2 = self.middle["x"] + oh2 / 2 + row * oh2
+        top_right += step * obstacle_height / self.player.step_size
+        top_right2 += step * oh2 / self.player.step_size
+        bottom_right += step * obstacle_height / self.player.step_size
+        bottom_right2 += step * oh2 / self.player.step_size
+        if self.render_mode == "3D":
+          pyxel.tri(top_right, self.middle["y"] - obstacle_height / 2, top_right2, self.middle["y"] - oh2 / 2, top_right2, self.middle["y"] + oh2 / 2, color)
+          pyxel.tri(top_right, self.middle["y"] - obstacle_height / 2, bottom_right, self.middle["y"] + obstacle_height / 2, bottom_right2, self.middle["y"] + oh2 / 2, color)
+        pyxel.line(top_right, self.middle["y"] - obstacle_height / 2, top_right2, self.middle["y"] - oh2 / 2, 12)
+        pyxel.line(bottom_right, self.middle["y"] + obstacle_height / 2, bottom_right2, self.middle["y"] + oh2 / 2, 12)
+        pyxel.line(top_right2, self.middle["y"] - oh2 / 2, top_right2, self.middle["y"] + oh2 / 2, 12)
