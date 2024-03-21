@@ -308,7 +308,7 @@ class App:
         if key.door[1] == block_x and key.door[0] == block_y:
           door_key = key
           break
-      if door_key and door_key.collected:
+      if (door_key and door_key.collected) or not door_key:
         pyxel.text(self.middle["x"] - 20, self.middle["y"] + 64, "[E] Open door", 7)
       else:
         pyxel.text(self.middle["x"] - 20, self.middle["y"] + 64, f"Collect {door_key.name} first", 7)
