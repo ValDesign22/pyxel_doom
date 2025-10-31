@@ -29,6 +29,9 @@ class App:
     self.floor_size = pyxel.width // pyxel.height * 4
     self.wall_height = pyxel.height // 2
     self.map = open(self.config.get("assets.map")).read().split("\n")
+    # Cache map dimensions for faster bounds checking
+    self.map_width = len(self.map[0]) if self.map else 0
+    self.map_height = len(self.map)
     
     # Player
     self.player = Player(len(self.map[0]) // 2, len(self.map) // 2, 0, self.map, self.config.get("config.player_speed"))
@@ -90,9 +93,16 @@ class App:
     elif self.player.orientation == Direction.SOUTH: block_y += 1
     elif self.player.orientation == Direction.WEST: block_x -= 1
     
-    if block_x < 0 or block_x >= len(self.map[0]) or block_y < 0 or block_y >= len(self.map):
+    if block_x < 0 or block_x >= self.map_width or block_y < 0 or block_y >= self.map_height:
       return None, None
     return block_x, block_y
+
+  def _get_door_key(self, block_x, block_y):
+    """Find the key associated with a door at the given position."""
+    for key in self.keys:
+      if key.door[1] == block_x and key.door[0] == block_y:
+        return key
+    return None
 
   # Game loop
   def update(self):
@@ -185,8 +195,8 @@ class App:
       self.player.rotate(1)
     self.player.sprint(pyxel.btn(pyxel.KEY_LSHIFT) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_X))
 
-    self.player.x = max(0, min(len(self.map[0]) - 1, self.player.x))
-    self.player.y = max(0, min(len(self.map) - 1, self.player.y))
+    self.player.x = max(0, min(self.map_width - 1, self.player.x))
+    self.player.y = max(0, min(self.map_height - 1, self.player.y))
 
     # Collect keys
     for key in self.keys:
@@ -198,11 +208,7 @@ class App:
     
     if self.map[block_y][block_x] == "D":
       if pyxel.btnp(pyxel.KEY_E) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_Y):
-        door_key = None
-        for key in self.keys:
-          if key.door[1] == block_x and key.door[0] == block_y:
-            door_key = key
-            break
+        door_key = self._get_door_key(block_x, block_y)
         if door_key and door_key.collected:
           self.map[block_y] = self.map[block_y][:block_x] + " " + self.map[block_y][block_x + 1:]
 
@@ -311,11 +317,7 @@ class App:
       return
     
     if self.map[block_y][block_x] == "D":
-      door_key = None
-      for key in self.keys:
-        if key.door[1] == block_x and key.door[0] == block_y:
-          door_key = key
-          break
+      door_key = self._get_door_key(block_x, block_y)
       if (door_key and door_key.collected) or not door_key:
         pyxel.text(self.middle["x"] - 20, self.middle["y"] + 64, "[E] Open door", 7)
       else:

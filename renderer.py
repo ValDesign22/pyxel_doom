@@ -16,6 +16,9 @@ class Renderer():
     self.render_distance = render_distance
     self.max_walls = max_walls
     self.render_mode = "3D"
+    # Cache map dimensions for faster bounds checking
+    self.map_width = len(map[0]) if map else 0
+    self.map_height = len(map)
 
   def change_render_mode(self):
     modes = ["wireframe", "3D"]
@@ -33,29 +36,39 @@ class Renderer():
   def draw_row(self, x, y, row):
     orientation = self.player.orientation
 
-    if orientation == Direction.NORTH: x += row
-    elif orientation == Direction.EAST: y += row
-    elif orientation == Direction.SOUTH: x -= row
-    elif orientation == Direction.WEST: y -= row
-    if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map): return
+    # Calculate direction deltas once
+    if orientation == Direction.NORTH:
+      dx_row, dy_row = row, 0
+      dx_forward, dy_forward = 0, -1
+    elif orientation == Direction.EAST:
+      dx_row, dy_row = 0, row
+      dx_forward, dy_forward = 1, 0
+    elif orientation == Direction.SOUTH:
+      dx_row, dy_row = -row, 0
+      dx_forward, dy_forward = 0, 1
+    else:  # WEST
+      dx_row, dy_row = 0, -row
+      dx_forward, dy_forward = -1, 0
+    
+    x += dx_row
+    y += dy_row
+    if x < 0 or x >= self.map_width or y < 0 or y >= self.map_height: return
 
+    # Find furthest visible distance
     distance = 0
-
+    temp_x, temp_y = x, y
     while True:
-      if self.player.orientation == Direction.NORTH: y -= 1
-      elif self.player.orientation == Direction.EAST: x += 1
-      elif self.player.orientation == Direction.SOUTH: y += 1
-      elif self.player.orientation == Direction.WEST: x -= 1
-      if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map): break
-      if distance > self.render_distance: break
+      temp_x += dx_forward
+      temp_y += dy_forward
+      if temp_x < 0 or temp_x >= self.map_width or temp_y < 0 or temp_y >= self.map_height: break
+      if distance >= self.render_distance: break
       distance += 1
 
-    while distance != 0:
-      if self.player.orientation == Direction.NORTH: y += 1
-      elif self.player.orientation == Direction.EAST: x -= 1
-      elif self.player.orientation == Direction.SOUTH: y -= 1
-      elif self.player.orientation == Direction.WEST: x += 1
-      if x < 0 or x >= len(self.map[0]) or y < 0 or y >= len(self.map): break
+    # Draw from furthest to nearest
+    while distance > 0:
+      x += dx_forward
+      y += dy_forward
+      if x < 0 or x >= self.map_width or y < 0 or y >= self.map_height: break
       if self.map[y][x] != " ":
         self.draw_obstacle(distance, x, y, row)
         if row != 0:
