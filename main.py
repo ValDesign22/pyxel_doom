@@ -82,6 +82,18 @@ class App:
     pyxel.fullscreen(self.fullscreen)
     pyxel.run(self.update, self.draw)
 
+  def _get_block_in_front(self):
+    """Calculate the block position in front of the player."""
+    block_x, block_y = self.player.x, self.player.y
+    if self.player.orientation == Direction.NORTH: block_y -= 1
+    elif self.player.orientation == Direction.EAST: block_x += 1
+    elif self.player.orientation == Direction.SOUTH: block_y += 1
+    elif self.player.orientation == Direction.WEST: block_x -= 1
+    
+    if block_x < 0 or block_x >= len(self.map[0]) or block_y < 0 or block_y >= len(self.map):
+      return None, None
+    return block_x, block_y
+
   # Game loop
   def update(self):
     self.counter += 1
@@ -180,12 +192,10 @@ class App:
     for key in self.keys:
       key.collect(self.player, self.map)
 
-    block_x, block_y = self.player.x, self.player.y
-    if self.player.orientation == Direction.NORTH: block_y -= 1
-    elif self.player.orientation == Direction.EAST: block_x += 1
-    elif self.player.orientation == Direction.SOUTH: block_y += 1
-    elif self.player.orientation == Direction.WEST: block_x -= 1
-    if block_x < 0 or block_x >= len(self.map[0]) or block_y < 0 or block_y >= len(self.map): return
+    block_x, block_y = self._get_block_in_front()
+    if block_x is None:
+      return
+    
     if self.map[block_y][block_x] == "D":
       if pyxel.btnp(pyxel.KEY_E) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_Y):
         door_key = None
@@ -296,12 +306,10 @@ class App:
     # Draw elements
     self.renderer.draw()
     
-    block_x, block_y = self.player.x, self.player.y
-    if self.player.orientation == Direction.NORTH: block_y -= 1
-    elif self.player.orientation == Direction.EAST: block_x += 1
-    elif self.player.orientation == Direction.SOUTH: block_y += 1
-    elif self.player.orientation == Direction.WEST: block_x -= 1
-    if block_x < 0 or block_x >= len(self.map[0]) or block_y < 0 or block_y >= len(self.map): return
+    block_x, block_y = self._get_block_in_front()
+    if block_x is None:
+      return
+    
     if self.map[block_y][block_x] == "D":
       door_key = None
       for key in self.keys:
@@ -343,9 +351,11 @@ class App:
     self.resolution = resolutions[(index + 1) % len(resolutions) if direction == "up" else (index - 1) % len(resolutions)].split("x")
   
   def save_settings(self):
-    self.config.set("config.render_distance", self.render_distance)
-    self.config.set("config.frame_rate", self.config.get("config.frame_rate"))
-    self.config.set("config.resolution", f"{self.resolution[0]}x{self.resolution[1]}")
+    # Batch config updates and save once at the end
+    self.config.set("config.render_distance", self.render_distance, save=False)
+    self.config.set("config.frame_rate", self.config.get("config.frame_rate"), save=False)
+    self.config.set("config.resolution", f"{self.resolution[0]}x{self.resolution[1]}", save=False)
+    self.config.save()
     self.settings_shown = False
     self.renderer = Renderer(self.player, self.map, self.colors, self.middle, self.wall_height, self.render_distance, self.max_walls)
 

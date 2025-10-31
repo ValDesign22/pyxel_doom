@@ -24,11 +24,10 @@ class Renderer():
   def draw(self):
     x, y = self.player.x, self.player.y
 
-    i = -self.max_walls
-    while i != 0:
+    # Draw from back to front for proper layering
+    for i in range(self.max_walls, 0, -1):
       self.draw_row(x, y, -i)
       self.draw_row(x, y, i)
-      i+=1
     self.draw_row(x, y, 0)
 
   def draw_row(self, x, y, row):
@@ -63,15 +62,18 @@ class Renderer():
           self.draw_side(distance, x, y, row)
       distance -= 1
 
-  def draw_obstacle(self, distance, x, y, row):
-    step=0
-    front_step = 0
+  def _calculate_steps(self):
+    """Calculate step and front_step based on player orientation."""
     if self.player.orientation == Direction.NORTH or self.player.orientation == Direction.SOUTH:
       step = -self.player.step["x"]
       front_step = self.player.step["y"] if self.player.orientation == Direction.NORTH else -self.player.step["y"]
-    elif self.player.orientation == Direction.EAST or self.player.orientation == Direction.WEST:
+    else:  # EAST or WEST
       step = self.player.step["y"]
       front_step = self.player.step["x"] if self.player.orientation == Direction.EAST else -self.player.step["x"]
+    return step, front_step
+
+  def draw_obstacle(self, distance, x, y, row):
+    step, front_step = self._calculate_steps()
     obstacle_height = self.wall_height / (1 + distance - front_step / self.player.step_size)
     left = self.middle["x"] - obstacle_height / 2 + row * obstacle_height
     right = self.middle["x"] + obstacle_height / 2 + row * obstacle_height
@@ -91,14 +93,7 @@ class Renderer():
   
   def draw_side(self, distance, x, y, row):
     if self.map[y][x] not in [" ", "K"]:
-      step = 0
-      front_step = 0
-      if self.player.orientation == Direction.NORTH or self.player.orientation == Direction.SOUTH:
-        step = -self.player.step["x"]
-        front_step = self.player.step["y"] if self.player.orientation == Direction.NORTH else -self.player.step["y"]
-      elif self.player.orientation == Direction.EAST or self.player.orientation == Direction.WEST:
-        step = self.player.step["y"]
-        front_step = self.player.step["x"] if self.player.orientation == Direction.EAST else -self.player.step["x"]
+      step, front_step = self._calculate_steps()
       obstacle_height = self.wall_height / (1 + distance - front_step / self.player.step_size)
       oh2 = self.wall_height / (2+distance - front_step / self.player.step_size)
       color = self.colors.get(self.map[y][x], 0)

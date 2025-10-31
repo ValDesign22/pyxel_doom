@@ -35,12 +35,17 @@ assets:
       value = value[key]
     return value
   
-  def set(self, key, value):
+  def set(self, key, value, save=True):
     keys = key.split(".")
     data = self.data
     for key in keys[:-1]:
       data = data[key]
     data[keys[-1]] = value
+    if save:
+      self.save()
+    return value
+  
+  def save(self):
+    """Explicitly save configuration to file."""
     with open(self.configfile, "w") as file:
       yaml.dump(self.data, file)
-    return value

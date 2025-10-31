@@ -41,7 +41,9 @@ class Player:
       self.y += delta
 
   def move(self, direction = 1):
-    if self.can_move():
+    current_time = time.time()
+    if current_time - self.last_time > self.time_step:
+      self.last_time = current_time
       if self.orientation == Direction.NORTH and self.map[self.y - direction][self.x] in [" ", "K"]:
         self.update_step("y", -direction)
       elif self.orientation == Direction.EAST and self.map[self.y][self.x + direction] in [" ", "K"]:
@@ -50,7 +52,6 @@ class Player:
         self.update_step("y", direction)
       elif self.orientation == Direction.WEST and self.map[self.y][self.x - direction] in [" ", "K"]:
         self.update_step("x", -direction)
-      self.last_time = time.time()
 
   def rotate(self, direction):
     self.orientation = (self.orientation + 90 * direction) % 360
