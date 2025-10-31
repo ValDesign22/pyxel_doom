@@ -65,14 +65,15 @@ class Renderer():
       distance += 1
 
     # Draw from furthest to nearest
+    render_x, render_y = x, y
     while distance > 0:
-      x += dx_forward
-      y += dy_forward
-      if x < 0 or x >= self.map_width or y < 0 or y >= self.map_height: break
-      if self.map[y][x] != " ":
-        self.draw_obstacle(distance, x, y, row)
+      render_x += dx_forward
+      render_y += dy_forward
+      if render_x < 0 or render_x >= self.map_width or render_y < 0 or render_y >= self.map_height: break
+      if self.map[render_y][render_x] != " ":
+        self.draw_obstacle(distance, render_x, render_y, row)
         if row != 0:
-          self.draw_side(distance, x, y, row)
+          self.draw_side(distance, render_x, render_y, row)
       distance -= 1
 
   def _calculate_steps(self):
