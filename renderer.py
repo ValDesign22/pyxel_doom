@@ -61,7 +61,7 @@ class Renderer():
       temp_x += dx_forward
       temp_y += dy_forward
       if temp_x < 0 or temp_x >= self.map_width or temp_y < 0 or temp_y >= self.map_height: break
-      if distance >= self.render_distance: break
+      if distance > self.render_distance: break
       distance += 1
 
     # Draw from furthest to nearest

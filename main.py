@@ -355,7 +355,7 @@ class App:
   def save_settings(self):
     # Batch config updates and save once at the end
     self.config.set("config.render_distance", self.render_distance, save=False)
-    self.config.set("config.frame_rate", self.config.get("config.frame_rate"), save=False)
+    # Note: frame_rate is already updated in config by change_frame_rate()
     self.config.set("config.resolution", f"{self.resolution[0]}x{self.resolution[1]}", save=False)
     self.config.save()
     self.settings_shown = False
